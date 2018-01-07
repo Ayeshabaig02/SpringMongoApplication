@@ -1,6 +1,7 @@
 package hello;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,13 @@ public class EmployeeController {
 
     }
 
-    @RequestMapping("/")
-    public List<Employee> all(){
-      return repository.findAll();
+    @RequestMapping("")
+    public List<Employee> all(@RequestParam(value="lastname",required = false)Optional<String> lastname){
+      if (!lastname.isPresent()){
+          return repository.findAll();
+      }else{
+          return repository.findByLastName(lastname.get());
+      }
 
     }
 }
